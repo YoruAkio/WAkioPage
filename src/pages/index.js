@@ -5,23 +5,13 @@ import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import CardRepo from '@/components/CardRepo';
 
-export default function Home() {
-    const [repos, setRepos] = useState([]);
+export default function Home({ repos }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchRepos() {
-            const res = await fetch(
-                '/api/getUserData?username=yoruakio&perPage=6',
-            );
-            const data = await res.json();
-            setRepos(data);
-            setTimeout(() => {
-                setLoading(false);
-            }, 1500);
-        }
-
-        fetchRepos();
+        setTimeout(() => {
+            setLoading(false);
+        }, 1500);
     }, []);
 
     if (loading) {
@@ -89,4 +79,15 @@ export default function Home() {
             <Footer />
         </div>
     );
+}
+
+export async function getServerSideProps() {
+    const res = await fetch('https://yoruakio.tech/api/getUserData?username=yoruakio&perPage=6');
+    const data = await res.json();
+
+    return {
+        props: {
+            repos: data,
+        },
+    };
 }
