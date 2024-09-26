@@ -6,9 +6,14 @@ import CardRepo from '@/components/CardRepo';
 import { Fade } from 'react-awesome-reveal';
 import { fetchUrl, fetchGithubData } from '@/utils/utils';
 
-export default function Home({ repos, reviewedPrs, pushedCommits, mergedPrsCount }) {
+export default function Home({
+    repos,
+    reviewedPrs,
+    pushedCommits,
+    mergedPrsCount,
+}) {
     return (
-        <div className="flex flex-col min-h-screen bg-gray-900 text-white font-[family-name:var(--font-geist-sans)]">
+        <div className="flex flex-col min-h-screen bg-base-300 text-base-content">
             <Navbar />
             <Hero
                 reviewedPrs={reviewedPrs}
@@ -18,7 +23,7 @@ export default function Home({ repos, reviewedPrs, pushedCommits, mergedPrsCount
             <section className="py-20">
                 <div className="container mx-auto">
                     <Fade triggerOnce>
-                        <h2 className="text-4xl font-bold text-center mb-8">
+                        <h2 className="text-4xl font-bold text-center mb-8 du-badge-info">
                             Projects
                         </h2>
                     </Fade>

@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [theme, setTheme] = useState('coffee');
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(theme === 'coffee' ? 'valentine' : 'coffee');
+    };
 
     return (
         <>
-            <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 w-11/12 sm:w-2/3 bg-gray-800 bg-opacity-65 backdrop-blur-md rounded-full px-4 sm:px-8 py-2 sm:py-4 shadow-lg z-10">
+            <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 w-11/12 sm:w-2/3 bg-base-200 bg-opacity-65 backdrop-blur-md rounded-full px-4 sm:px-8 py-2 sm:py-4 shadow-lg z-10">
                 <div className="flex justify-between items-center">
                     <div className="flex-1 text-center sm:text-left">
                         <div className="text-white font-bold font-sans">
@@ -41,6 +50,18 @@ export default function Navbar() {
                             <a href="/project" className="text-white">
                                 Project
                             </a>
+                        </li>
+                        <li>
+                            <button
+                                onClick={toggleTheme}
+                                className="text-white focus:outline-none"
+                            >
+                                {theme === 'coffee' ? (
+                                    <FiSun className="w-6 h-6" />
+                                ) : (
+                                    <FiMoon className="w-6 h-6" />
+                                )}
+                            </button>
                         </li>
                     </ul>
                 </div>
