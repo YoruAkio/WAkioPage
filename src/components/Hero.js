@@ -1,6 +1,6 @@
 import { Fade } from 'react-awesome-reveal';
 
-export default function Hero() {
+export default function Hero({ reviewedPrs, pushedCommits, mergedPrsCount }) {
     return (
         <Fade triggerOnce>
             <section className="relative flex flex-col items-center justify-center text-center py-20 mt-16 sm:mt-24 text-white mt-30 mx-8">
@@ -10,9 +10,14 @@ export default function Hero() {
                 <h1 className="relative text-5xl sm:text-7xl font-extrabold mb-4">
                     Welcome to My Portfolio
                 </h1>
-                <p className="relative text-lg sm:text-2xl mb-8">
+                <p className="relative text-lg sm:text-2xl mb-2">
                     I'm from Indonesia, a self-taught student developer who
                     loves watching anime and adores cats.
+                </p>
+                <p className="relative text-lg sm:text-0.8xl mb-8 font-bold underline">
+                    In the last 90 days on GitHub I reviewed {reviewedPrs} PRs,
+                    pushed {pushedCommits} commits, and merged {mergedPrsCount}{' '}
+                    PRs in public repositories.
                 </p>
             </section>
         </Fade>
