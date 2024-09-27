@@ -18,6 +18,6 @@ module.exports = {
     },
     plugins: [require('daisyui')],
     daisyui: {
-        themes: ['coffee', 'valentine'],
+        themes: ['coffee', 'retro'],
     },
 };

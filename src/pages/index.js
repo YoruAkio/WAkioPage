@@ -4,7 +4,8 @@ import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import CardRepo from '@/components/CardRepo';
 import { Fade } from 'react-awesome-reveal';
-import { fetchUrl, fetchGithubData } from '@/utils/utils';
+import path from 'path';
+import fs from "fs";
 
 export default function Home({
     repos,
@@ -23,9 +24,10 @@ export default function Home({
             <section className="py-20">
                 <div className="container mx-auto">
                     <Fade triggerOnce>
-                        <h2 className="text-4xl font-bold text-center mb-8 du-badge-info">
+                        <h2 className="text-4xl font-bold text-center mb-2 du-badge-info">
                             Projects
                         </h2>
+                        <p className="relative text-lg sm:text-0.8xl mb-8 font-bold underline text-center">The latest repositories I've worked on</p>
                     </Fade>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl mx-auto">
                         {Array.isArray(repos) && repos.length > 0 ? (
@@ -35,6 +37,7 @@ export default function Home({
                                     name={repo.name}
                                     description={repo.description}
                                     html_url={repo.html_url}
+                                    pushed_at={repo.formatted_pushed_at}
                                 />
                             ))
                         ) : (
@@ -49,32 +52,28 @@ export default function Home({
 }
 
 export async function getServerSideProps() {
-    const now = new Date();
-    const ninetyDaysAgo = new Date(
-        now.setDate(now.getDate() - 90),
-    ).toISOString();
+    const dataDir = path.join(process.cwd(), 'public/data');
 
-    const [repoData, prs, commits, mergedPrs] = await Promise.all([
-        fetchUrl(
-            `https://yoruakio.tech/api/getUserData?username=yoruakio&perPage=6`,
-        ),
-        fetchGithubData(
-            `https://api.github.com/search/issues?q=type:pr+author:yoruakio+created:>${ninetyDaysAgo}`,
-        ),
-        fetchGithubData(
-            `https://api.github.com/search/commits?q=author:yoruakio+committer-date:>${ninetyDaysAgo}`,
-        ),
-        fetchGithubData(
-            `https://api.github.com/search/issues?q=type:pr+state:closed+author:yoruakio+merged:>${ninetyDaysAgo}`,
-        ),
-    ]);
-    
+    const readJsonFile = (fileName) => {
+        const filePath = path.join(dataDir, fileName);
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(fileContents);
+    };
+
+    const repoData = readJsonFile('reposData.json');
+    const githubData = readJsonFile('githubData.json');
+
+    const formattedRepoData = repoData.map(repo => ({
+        ...repo,
+        formatted_pushed_at: new Date(repo.pushed_at).toLocaleDateString()
+    }));
+
     return {
         props: {
-            repos: Array.isArray(repoData) ? repoData : [],
-            reviewedPrs: prs.total_count || 0,
-            pushedCommits: commits.total_count || 0,
-            mergedPrsCount: mergedPrs.total_count || 0,
+            repos: Array.isArray(formattedRepoData) ? formattedRepoData : [],
+            reviewedPrs: githubData.prs || 0,
+            pushedCommits: githubData.commits || 0,
+            mergedPrsCount: githubData.mergedPrs || 0,
         },
     };
 }
