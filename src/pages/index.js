@@ -28,14 +28,18 @@ export default function Home({
                         </h2>
                     </Fade>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl mx-auto">
-                        {repos.map(repo => (
-                            <CardRepo
-                                key={repo.id}
-                                name={repo.name}
-                                description={repo.description}
-                                html_url={repo.html_url}
-                            />
-                        ))}
+                        {Array.isArray(repos) && repos.length > 0 ? (
+                            repos.map(repo => (
+                                <CardRepo
+                                    key={repo.id}
+                                    name={repo.name}
+                                    description={repo.description}
+                                    html_url={repo.html_url}
+                                />
+                            ))
+                        ) : (
+                            <p>No repositories found.</p>
+                        )}
                     </div>
                 </div>
             </section>
@@ -64,13 +68,13 @@ export async function getServerSideProps() {
             `https://api.github.com/search/issues?q=type:pr+state:closed+author:yoruakio+merged:>${ninetyDaysAgo}`,
         ),
     ]);
-
+    
     return {
         props: {
-            repos: repoData,
-            reviewedPrs: prs.total_count,
-            pushedCommits: commits.total_count,
-            mergedPrsCount: mergedPrs.total_count,
+            repos: Array.isArray(repoData) ? repoData : [],
+            reviewedPrs: prs.total_count || 0,
+            pushedCommits: commits.total_count || 0,
+            mergedPrsCount: mergedPrs.total_count || 0,
         },
     };
 }
