@@ -15,7 +15,7 @@ jobs:
 
       - name: Trigger fetchData function
         run: |
-          curl -X POST https://<your-vercel-deployment-url>/api/fetchGithubData \
+          curl -X POST https://yoruakio.tech/api/fetchGithubData \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
