@@ -15,7 +15,6 @@ jobs:
 
       - name: Trigger fetchData function
         run: |
-          curl -X POST https://yoruakio.tech/api/fetchGithubData \
-          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}"
+          curl -X POST https://yoruakio.tech/api/fetchGithubData -H "Authorization: Bearer ${{ secrets.API_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
