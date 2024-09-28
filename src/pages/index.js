@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import CardRepo from '@/components/CardRepo';
 import { Fade } from 'react-awesome-reveal';
-import path from 'path';
-import fs from "fs";
+import path from 'node:path';
+import fs from "node:fs";
 
 export default function Home({
     repos,
@@ -75,5 +74,6 @@ export async function getServerSideProps() {
             pushedCommits: githubData.commits || 0,
             mergedPrsCount: githubData.mergedPrs || 0,
         },
+        revalidate: 60,
     };
 }
