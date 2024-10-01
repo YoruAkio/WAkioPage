@@ -73,7 +73,6 @@ export async function getServerSideProps() {
             reviewedPrs: githubData.prs || 0,
             pushedCommits: githubData.commits || 0,
             mergedPrsCount: githubData.mergedPrs || 0,
-        },
-        revalidate: 60,
+        }
     };
 }
